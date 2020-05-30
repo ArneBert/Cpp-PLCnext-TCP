@@ -101,9 +101,13 @@ void TcpEchoServer::Process()
         // No receive any message and reply it directly to the sender.
         while (true)
         {
-            memset(buffer, 0, sizeof(buffer));
+            //arrayReader is a byte array of 512 bytes. 
+            //memset(buffer, 0, sizeof(buffer));
+            memcpy(buffer,arrayReader, sizeof(buffer));
             int bytesReceived = newSocket->Receive(buffer, sizeof(buffer), error);
-            int sendResult = newSocket->Send(buffer, bytesReceived, error);
+            int sendResult = newSocket->Send(buffer, sizeof(buffer), error);
+            //arrayWriter is a byte array of 512 bytes. 
+            memcpy(arrayWriter, buffer, sizeof(buffer));
         }
         (void) newSocket->Shutdown();
         (void) newSocket->Close();
