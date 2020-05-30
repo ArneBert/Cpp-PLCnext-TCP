@@ -59,9 +59,55 @@ void CppRSCServiceComponent::workerThreadBody(void) {
     size_t arraySize = arrayReader.GetSize();   //Get the size of Array
     size_t r_offset = 0;                        //reinitialize the r_offset
     RscVariant<512> valueTmp = {0};             //reinitialize the valueTmp
-
-
+	
+	
 
 	}
+	
+class TcpEchoServer
+{
+public:
+    TcpEchoServer(void);
+    void Process();
+private:
+    Socket listeningSocket;
+};
+inline TcpEchoServer::TcpEchoServer(void) : listeningSocket(SocketType::Tcp, SocketDomain::Ipv4, SocketBlockingMode::Blocking)
+{}
+void TcpEchoServer::Process()
+{
+    int port = 5000;
+    // Bind the port to any local address.
+    if (listeningSocket.Bind(0, port) != SocketError::None)
+    {
+        return;
+    }
+    // Make socket a passive listener that processes incoming connection requests.
+    if (listeningSocket.Listen(10) != SocketError::None)
+    {
+        return;
+    }
+
+    //Other PLC adress is 192.168.1.105 
+    uint32 remoteIp;
+    //remotePort is 4000
+    int remotePort;
+    SocketError error;
+    // Wait for the first client that requests a connection and accept it.
+    Socket::Ptr newSocket = listeningSocket.Accept(remoteIp, remotePort, error);
+    if (newSocket != nullptr)
+    {
+        byte buffer[512];
+        // No receive any message and reply it directly to the sender.
+        while (true)
+        {
+            memset(buffer, 0, sizeof(buffer));
+            int bytesReceived = newSocket->Receive(buffer, sizeof(buffer), error);
+            int sendResult = newSocket->Send(buffer, bytesReceived, error);
+        }
+        (void) newSocket->Shutdown();
+        (void) newSocket->Close();
+    }
+}
 
 } // end of namespace CppRSCService
