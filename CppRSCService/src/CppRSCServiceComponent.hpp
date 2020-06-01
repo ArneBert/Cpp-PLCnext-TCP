@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Arp/System/Core/Arp.h"
 #include "Arp/System/Acf/ComponentBase.hpp"
 #include "Arp/System/Acf/IApplication.hpp"
@@ -21,6 +21,9 @@
 #include "Arp/Services/DataLogger/Services/ErrorCode.hpp"
 #include "Arp/Plc/Gds/Services/VariableInfo.hpp"
 
+#include "Arp/Plc/Gds/Services/IDataAccessService.hpp"
+#include "Arp/System/Commons/Net/Socket.hpp"
+
 #include <mutex>
 namespace CppRSCService
 {
@@ -37,6 +40,8 @@ using namespace Arp::Plc::Gds::Services;
 using namespace Arp::System::Acf;
 using namespace Arp::Plc::Commons::Esm;
 using namespace Arp::Plc::Commons::Meta;
+
+using namespace Arp::System::Commons::Net;
 
 //#component
 class CppRSCServiceComponent
@@ -79,6 +84,10 @@ private: // fields
            Arp::DateTime startTime;
            Arp::DateTime endTime;
 
+           std::shared_ptr<Socket> listeningSocket;
+
+           ReadItem       	ReadSingle(const RscString<512>& portName);
+           WriteItem		WriteSingle(const RscString<512>& portName);
 
 
 public: /* Ports
@@ -111,7 +120,6 @@ public: /* Ports
 inline IComponent::Ptr CppRSCServiceComponent::Create(Arp::System::Acf::IApplication& application, const String& name)
 {
     return IComponent::Ptr(new CppRSCServiceComponent(application, name));
-//	return IComponent::Ptr(new CppRSCServiceComponent(application, name));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
