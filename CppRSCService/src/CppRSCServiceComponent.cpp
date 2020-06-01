@@ -1,8 +1,7 @@
-﻿#include "CppRSCServiceComponent.hpp"
+#include "CppRSCServiceComponent.hpp"
 #include "Arp/Plc/Commons/Esm/ProgramComponentBase.hpp"
 #include "CppRSCServiceLibrary.hpp"
-#include "Arp/System/Commons/Net/Socket.hpp"
-#include "Arp/System/Commons/Net/IpAddress.hpp"
+
 
 namespace CppRSCService
 {
@@ -33,6 +32,7 @@ void CppRSCServiceComponent::SetupConfig()
     ProgramComponentBase::SetupConfig();
 
     // setup project config here
+    listeningSocket = std::make_shared<Socket>(SocketType::Tcp, SocketDomain::Ipv4, SocketBlockingMode::Blocking);
 }
 
 void CppRSCServiceComponent::ResetConfig()
@@ -50,68 +50,54 @@ void CppRSCServiceComponent::workerThreadBody(void) {
 
 			startTime = endTime;  		  	//The time window includes records between two worker thread cycles
 
-	IRscReadEnumerator<RscVariant<512>>& readEnumerator;
-	readEnumerator.BeginRead();
-	RscVariant<512> currentVarriant;
+//	IRscReadEnumerator<RscVariant<512>>& readEnumerator;
+//	readEnumerator.BeginRead();
+//	RscVariant<512> currentVarriant;
+//
+//
+//	RscArrayReader arrayReader(currentVarriant);
+//    size_t arraySize = arrayReader.GetSize();   //Get the size of Array
+//    size_t r_offset = 0;                        //reinitialize the r_offset
+//    RscVariant<512> valueTmp = {0};             //reinitialize the valueTmp
 
+    	int port = 5000;
+    	// Bind the port to any local address.
+        if (listeningSocket.Bind(0, port) != SocketError::None)
+        {
+            return;
+        }
+        // Make socket a passive listener that processes incoming connection requests.
+        if (listeningSocket.Listen(10) != SocketError::None)
+        {
+            return;
+        }
 
-	RscArrayReader arrayReader(currentVarriant);
-    size_t arraySize = arrayReader.GetSize();   //Get the size of Array
-    size_t r_offset = 0;                        //reinitialize the r_offset
-    RscVariant<512> valueTmp = {0};             //reinitialize the valueTmp
-	
-	
+        //Other PLC adress is 192.168.1.105
+        uint32 remoteIp = 3232235881;
+        //remotePort is 4000
+        int remotePort = 4000;
+        SocketError error;
+        // Wait for the first client that requests a connection and accept it.
+        Socket::Ptr newSocket = listeningSocket.Accept(remoteIp, remotePort, error);
+        if (newSocket != nullptr)
+        {
+            byte buffer[512];
+            // No receive any message and reply it directly to the sender.
+            while (true)
+            {
+                //arrayReader is a byte array of 512 bytes.
+                //memset(buffer, 0, sizeof(buffer));
+                memcpy(buffer,arrayReader, sizeof(buffer));
+                int bytesReceived = newSocket->Receive(buffer, sizeof(buffer), error);
+                int sendResult = newSocket->Send(buffer, sizeof(buffer), error);
+                //arrayWriter is a byte array of 512 bytes.
+                memcpy(arrayWriter, buffer, sizeof(buffer));
+            }
+            (void) newSocket->Shutdown();
+            (void) newSocket->Close();
+        }
+
 
 	}
-	
-class TcpEchoServer
-{
-public:
-    TcpEchoServer(void);
-    void Process();
-private:
-    Socket listeningSocket;
-};
-inline TcpEchoServer::TcpEchoServer(void) : listeningSocket(SocketType::Tcp, SocketDomain::Ipv4, SocketBlockingMode::Blocking)
-{}
-void TcpEchoServer::Process()
-{
-    int port = 5000;
-    // Bind the port to any local address.
-    if (listeningSocket.Bind(0, port) != SocketError::None)
-    {
-        return;
-    }
-    // Make socket a passive listener that processes incoming connection requests.
-    if (listeningSocket.Listen(10) != SocketError::None)
-    {
-        return;
-    }
-
-    //Other PLC adress is 192.168.1.105 
-    uint32 remoteIp;
-    //remotePort is 4000
-    int remotePort;
-    SocketError error;
-    // Wait for the first client that requests a connection and accept it.
-    Socket::Ptr newSocket = listeningSocket.Accept(remoteIp, remotePort, error);
-    if (newSocket != nullptr)
-    {
-        byte buffer[512];
-        // No receive any message and reply it directly to the sender.
-        while (true)
-        {
-            //arrayReader is a byte array of 512 bytes. 
-            //memset(buffer, 0, sizeof(buffer));
-            memcpy(buffer,arrayReader, sizeof(buffer));
-            int bytesReceived = newSocket->Receive(buffer, sizeof(buffer), error);
-            int sendResult = newSocket->Send(buffer, sizeof(buffer), error);
-            //arrayWriter is a byte array of 512 bytes. 
-            memcpy(arrayWriter, buffer, sizeof(buffer));
-        }
-        (void) newSocket->Shutdown();
-        (void) newSocket->Close();
-    }
-}
 
 } // end of namespace CppRSCService
