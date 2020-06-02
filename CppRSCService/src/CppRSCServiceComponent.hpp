@@ -83,11 +83,15 @@ private: // fields
     //Start and End time as time window parameter
            Arp::DateTime startTime;
            Arp::DateTime endTime;
+           Arp::DateTime ActiveTime;
 
            std::shared_ptr<Socket> listeningSocket;
+           std::shared_ptr<Socket> newSocket;
 
            ReadItem       	ReadSingle(const RscString<512>& portName);
            WriteItem		WriteSingle(const RscString<512>& portName);
+
+
 
 
 public: /* Ports
@@ -131,7 +135,6 @@ inline CppRSCServiceComponent::CppRSCServiceComponent(IApplication& application,
 
 // ADDED: Worker Thread
 , workerThreadInstance(make_delegate(this, &CppRSCServiceComponent::workerThreadBody), 100 , "WorkerThreadName")
-//, workerThreadInstance(make_delegate(this, &CppRscServiceComponent::workerThreadBody) , 100, "WorkerThreadName")
-{
+ {
 }
 } // end of namespace CppRSCService
