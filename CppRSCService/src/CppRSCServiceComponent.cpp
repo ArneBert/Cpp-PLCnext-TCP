@@ -33,6 +33,7 @@ void CppRSCServiceComponent::SetupConfig()
 
     // setup project config here
     listeningSocket = std::make_shared<Socket>(SocketType::Tcp, SocketDomain::Ipv4, SocketBlockingMode::Blocking);
+
 }
 
 void CppRSCServiceComponent::ResetConfig()
@@ -61,24 +62,34 @@ void CppRSCServiceComponent::workerThreadBody(void) {
 //    RscVariant<512> valueTmp = {0};             //reinitialize the valueTmp
 
     	int port = 5000;
+    	byte arrayReader[512];
+    	std::size_t i;
+		for (i = 0; i < sizeof(arrayReader); ++i) {
+			arrayReader[i] =8;
+		}
+    	byte arrayWriter[512];
     	// Bind the port to any local address.
-        if (listeningSocket.Bind(0, port) != SocketError::None)
+
+        if (listeningSocket -> Bind(0,port) != SocketError::None)
         {
             return;
         }
         // Make socket a passive listener that processes incoming connection requests.
-        if (listeningSocket.Listen(10) != SocketError::None)
+        if (listeningSocket -> Listen(10) != SocketError::None)
         {
             return;
         }
 
-        //Other PLC adress is 192.168.1.105
-        uint32 remoteIp = 3232235881;
+        //Other PLC IP-adress is 192.168.1.105
+        //uint32 remoteIp = 3232235881;
+        IpAddress::IpV4Value test = 3232235881;
         //remotePort is 4000
         int remotePort = 4000;
         SocketError error;
         // Wait for the first client that requests a connection and accept it.
-        Socket::Ptr newSocket = listeningSocket.Accept(remoteIp, remotePort, error);
+
+        Socket::Ptr newSocket;
+        newSocket = listeningSocket -> Accept(test,remotePort , error);
         if (newSocket != nullptr)
         {
             byte buffer[512];
