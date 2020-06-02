@@ -11,8 +11,9 @@ void CppRSCServiceProgram::Execute()
  // Something has to follow here, but I'm not quiet sure what.
  	 uint32 dword;
 	 RscString<512> dwordstr;
+	 dwordstr = "Arp.Plc.Eclr/main1.DW_IN1";
 
-	 ReadSingle(dwordstr & "Arp.Plc.Eclr/main1.DW_IN");
+	 ReadSingle(dwordstr);
 
 }
 
