@@ -48,7 +48,7 @@ public: /* Ports
 	uint8 OutBuffer [512] = {0}; //The Port-Variable for the connection in PLCnext Engineer
 	
 	//#port
-	//#attributes(Output|Retain)
+	//#attributes(Input|Retain)
 	//#name(OUTDword)
 	uint32 OUTDword; //The Port-Variable for the connection in PLCnext Engineer
 
