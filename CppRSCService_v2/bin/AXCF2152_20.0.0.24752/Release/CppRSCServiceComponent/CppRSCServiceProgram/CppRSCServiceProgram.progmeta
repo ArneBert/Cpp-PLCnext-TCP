@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MetaConfigurationDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" schemaVersion="2.0" xmlns="http://www.phoenixcontact.com/schema/metaconfig">
+  <Program type="CppRSCServiceProgram">
+    <Ports>
+      <Port name="OutBuffer" type="uint8" attributes="Input|Retain" dimensions="512" />
+      <Port name="OUTDword" type="uint32" attributes="Output|Retain" dimensions="" />
+      <Port name="InBuffer" type="uint8" attributes="Input|Retain" dimensions="512" />
+      <Port name="OUTstart" type="int32" attributes="Output|Retain" dimensions="" />
+      <Port name="OUTstart" type="int32" attributes="Output|Retain" dimensions="" />
+      <Port name="OUTstart" type="int32" attributes="Output|Retain" dimensions="" />
+    </Ports>
+  </Program>
+</MetaConfigurationDocument>
