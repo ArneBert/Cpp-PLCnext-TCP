@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MetaConfigurationDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" schemaVersion="2.0" xmlns="http://www.phoenixcontact.com/schema/metaconfig">
+  <Library name="CppRSCService" applicationDomain="CPLUSPLUS">
+    <File path="libCppRSCService.so" />
+    <TypeIncludes>
+      <Include path="CppRSCService.typemeta" />
+    </TypeIncludes>
+    <ComponentIncludes>
+      <Include path="CppRSCServiceComponent/CppRSCServiceComponent.compmeta" />
+    </ComponentIncludes>
+  </Library>
+</MetaConfigurationDocument>
