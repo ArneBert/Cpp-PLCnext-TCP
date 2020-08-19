@@ -16,8 +16,6 @@ using namespace Arp::Plc::Commons::Esm;
 class CppRSCServiceProgram : public ProgramBase, private Loggable<CppRSCServiceProgram>
 {
 public: // typedefs
-	byte arrayWriter2[512];
-	byte arrayReader2[512];
 
 public: // construction/destruction
     CppRSCServiceProgram(CppRSCService::CppRSCServiceComponent& cppRSCServiceComponentArg, const String& name);
