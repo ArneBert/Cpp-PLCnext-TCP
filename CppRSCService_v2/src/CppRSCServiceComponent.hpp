@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Arp/System/Core/Arp.h"
 #include "Arp/System/Acf/ComponentBase.hpp"
 #include "Arp/System/Acf/IApplication.hpp"
@@ -85,10 +85,18 @@ private: // fields
            WorkerThread workerThreadInstance;
 
     //Start and End time as time window parameter
+           
            Arp::DateTime startTime;
            Arp::DateTime endTime;
            Arp::DateTime activeTime;
 
+           byte arrayReader[512];
+           byte arrayWriter[512];
+
+		   int64 int64startTime2;
+		   int64 int64endTime2;
+		   int64 int64activeTime2;
+		   
 
            bool xStopThread = false;
 
@@ -121,6 +129,52 @@ public: /* Ports
            The #name comment defines the GDS name of an individual port element. If omitted, the member variable name is used as the GDS name.
            The members of the struct can be declared with any of the attributes allowed for a Program port.
         */
+
+           	   //#attributes(Hidden)
+               struct Ports
+               {
+               // Some Input Variables like TargetIP, Target Port, Start Connection, ect ect...
+
+               //#name(In)
+               //#attributes(Input)
+               Arp::byte InField[512];;
+               //#name(ReadNext)
+               //#attributes(Output)
+               Arp::boolean CanReadNext = false; // Some other component will recieve this and send Values when true to InField.
+
+               //#name(Out)
+               //#attributes(Output)
+               Arp::byte OutField[512];;
+
+               //#name(WriteNext)
+               //#attributes(Input)
+               Arp::boolean CanWriteNext = false; // Some other component will set this and recieve Values from true to OutField.
+
+				//#name(starttime)
+				//#attributes(Output)
+				Arp::DateTime startTime;
+
+				//#name(ActiveTime)
+				//#attributes(Output)
+				Arp::DateTime activeTime;
+
+				//#name(Endtime)
+				//#attributes(Output)
+				Arp::DateTime endTime;
+
+				//#name(Starttimeticks)
+				//#attributes(Output)
+				int64 int64startTime2;
+
+				//#name(Activetimeticks)
+				//#attributes(Output)
+				int64 int64activeTime2;
+
+				//#name(EndTimeticks)
+				//#attributes(Output)
+				int64 int64endTime2;
+
+               };
 };
 
 inline IComponent::Ptr CppRSCServiceComponent::Create(Arp::System::Acf::IApplication& application, const String& name)
