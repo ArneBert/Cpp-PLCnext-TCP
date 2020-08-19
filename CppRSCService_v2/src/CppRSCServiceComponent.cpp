@@ -1,4 +1,4 @@
-﻿#include "CppRSCServiceComponent.hpp"
+#include "CppRSCServiceComponent.hpp"
 #include "Arp/Plc/Commons/Esm/ProgramComponentBase.hpp"
 #include "CppRSCServiceLibrary.hpp"
 
@@ -68,11 +68,15 @@ void CppRSCServiceComponent::workerThreadBody(void) {
 		   startTime = Arp::DateTime::Now(); //The time window includes records between two worker thread cycles
 
 		   int port = 5000;
-	    	byte arrayReader[512];
-	    	byte arrayWriter[512];
+	    	//byte arrayReader[512];
+	    	//byte arrayWriter[512];
 	    	std::size_t i;
+
+
+
 			for (i = 0; i < sizeof(arrayReader); ++i) {
 				arrayWriter[i] =8;
+				arrayReader[i] =8;
 			}
 	    	// Bind the port to any local address.
 
@@ -110,6 +114,7 @@ void CppRSCServiceComponent::workerThreadBody(void) {
 			                   int bytesReceived = newSocket->Receive(buffer, sizeof(buffer), error);
 			                   memcpy(buffer,arrayReader, sizeof(buffer));
 			                   memcpy(arrayWriter, buffer, sizeof(buffer));
+
 			                   int sendResult = newSocket->Send(buffer, sizeof(buffer), error);
 			                   //arrayWriter is a byte array of 512 bytes.
 
@@ -125,11 +130,16 @@ void CppRSCServiceComponent::workerThreadBody(void) {
 			           intstartTime = startTime.GetMinute()*1000000;
 			           intstartTime = startTime.GetHour()*100000000;
 
+			           int64startTime2 = startTime.GetTicks();
+
+
 			           int32 intactiveTime = activeTime.GetMicrosecond();
 					   intactiveTime = activeTime.GetMillisecond()*100;
 					   intactiveTime = activeTime.GetSecond() *10000;
 					   intactiveTime = activeTime.GetMinute()*1000000;
 					   intactiveTime = activeTime.GetHour()*100000000;
+
+					   int64activeTime2 = activeTime.GetTicks();
 
 			           int32 intendTime = endTime.GetMicrosecond();
 			           intendTime = endTime.GetMillisecond()*100;
@@ -137,6 +147,7 @@ void CppRSCServiceComponent::workerThreadBody(void) {
 			           intendTime = endTime.GetMinute()*1000000;
 			           intendTime = endTime.GetHour()*100000000;
 
+			           int64endTime2 = endTime.GetTicks();
 
 			           Thread::Sleep(10000);
 
