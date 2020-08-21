@@ -65,7 +65,7 @@ void CppRSCServiceComponent::Stop()
 /// Thread Body
 
 void CppRSCServiceComponent::workerThreadBody(void) {
-		   startTime = Arp::DateTime::Now(); //The time window includes records between two worker thread cycles
+	ports.startTime = Arp::DateTime::Now(); //The time window includes records between two worker thread cycles
 
 		   int port = 5000;
 	    	//byte arrayReader[512];
@@ -74,13 +74,13 @@ void CppRSCServiceComponent::workerThreadBody(void) {
 
 
 
-			for (i = 0; i < sizeof(arrayReader); ++i) {
-				arrayWriter[i] =8;
-				arrayReader[i] =8;
+			for (i = 0; i < sizeof(ports.InField); ++i) {
+				ports.OutField[i] =8;
+				ports.InField[i] =8;
 			}
-	    	// Bind the port to any local address.
 
-		   if(!xStopThread)
+
+		   if(ports.xtest)
 		   	{
 			   if (listeningSocket -> Bind(0,port) != SocketError::None)
 			           {
@@ -104,7 +104,7 @@ void CppRSCServiceComponent::workerThreadBody(void) {
 			           newSocket = listeningSocket -> Accept(test,remotePort , error);
 			           if (newSocket != nullptr)
 			           {
-			        	   activeTime = Arp::DateTime::Now();
+			        	   ports.activeTime = Arp::DateTime::Now();
 			               byte buffer[512];
 			               // No receive any message and reply it directly to the sender.
 			               while (true)
@@ -112,8 +112,8 @@ void CppRSCServiceComponent::workerThreadBody(void) {
 			                   //arrayReader is a byte array of 512 bytes.
 
 			                   int bytesReceived = newSocket->Receive(buffer, sizeof(buffer), error);
-			                   memcpy(buffer,arrayReader, sizeof(buffer));
-			                   memcpy(arrayWriter, buffer, sizeof(buffer));
+			                   memcpy(buffer,ports.OutField, sizeof(buffer));
+			                   memcpy(ports.InField, buffer, sizeof(buffer));
 
 			                   int sendResult = newSocket->Send(buffer, sizeof(buffer), error);
 			                   //arrayWriter is a byte array of 512 bytes.
@@ -121,35 +121,14 @@ void CppRSCServiceComponent::workerThreadBody(void) {
 			               }
 			               (void) newSocket->Shutdown();
 			               (void) newSocket->Close();
-			               endTime = Arp::DateTime::Now();
+			               ports.endTime = Arp::DateTime::Now();
 			           }
 
-			           int32 intstartTime = startTime.GetMicrosecond();
-			           intstartTime = startTime.GetMillisecond()*100;
-			           intstartTime = startTime.GetSecond() *10000;
-			           intstartTime = startTime.GetMinute()*1000000;
-			           intstartTime = startTime.GetHour()*100000000;
+			           ports.int64startTime2 = ports.startTime.GetTicks();
+				   ports.int64activeTime2 = ports.activeTime.GetTicks();
+			           ports.int64endTime2 = ports.endTime.GetTicks();
 
-			           int64startTime2 = startTime.GetTicks();
-
-
-			           int32 intactiveTime = activeTime.GetMicrosecond();
-					   intactiveTime = activeTime.GetMillisecond()*100;
-					   intactiveTime = activeTime.GetSecond() *10000;
-					   intactiveTime = activeTime.GetMinute()*1000000;
-					   intactiveTime = activeTime.GetHour()*100000000;
-
-					   int64activeTime2 = activeTime.GetTicks();
-
-			           int32 intendTime = endTime.GetMicrosecond();
-			           intendTime = endTime.GetMillisecond()*100;
-			           intendTime = endTime.GetSecond() *10000;
-			           intendTime = endTime.GetMinute()*1000000;
-			           intendTime = endTime.GetHour()*100000000;
-
-			           int64endTime2 = endTime.GetTicks();
-
-			           Thread::Sleep(10000);
+			           Thread::Sleep(1000);
 
 					  //uint32 elapsed_time = endTime - startTime;
 		   	}
