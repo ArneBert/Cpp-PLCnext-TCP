@@ -85,7 +85,8 @@ private: // fields
            WorkerThread workerThreadInstance;
 
     //Start and End time as time window parameter
-           
+
+           /*
            Arp::DateTime startTime;
            Arp::DateTime endTime;
            Arp::DateTime activeTime;
@@ -96,7 +97,9 @@ private: // fields
 		   int64 int64startTime2;
 		   int64 int64endTime2;
 		   int64 int64activeTime2;
-		   
+
+		   */
+
 
            bool xStopThread = false;
 
@@ -142,6 +145,10 @@ public: /* Ports
                //#attributes(Output)
                Arp::boolean CanReadNext = false; // Some other component will recieve this and send Values when true to InField.
 
+               //#name(Start network)
+               //#attributes(Input)
+				bool xtest = false;
+
                //#name(Out)
                //#attributes(Output)
                Arp::byte OutField[512];;
@@ -174,7 +181,11 @@ public: /* Ports
 				//#attributes(Output)
 				int64 int64endTime2;
 
+
+
                };
+
+               Ports ports;
 };
 
 inline IComponent::Ptr CppRSCServiceComponent::Create(Arp::System::Acf::IApplication& application, const String& name)
