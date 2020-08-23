@@ -87,7 +87,7 @@ void CppRSCServiceComponent::workerThreadBody(void) {
 			               return;
 			           }
 			           // Make socket a passive listener that processes incoming connection requests.
-			           if (listeningSocket -> Listen(10) != SocketError::None)
+			           if (listeningSocket -> Listen(5) != SocketError::None)
 			           {
 			               return;
 			           }
@@ -119,16 +119,16 @@ void CppRSCServiceComponent::workerThreadBody(void) {
 			                   //arrayWriter is a byte array of 512 bytes.
 
 			               }
-			               (void) newSocket->Shutdown();
+
 			               (void) newSocket->Close();
 			               ports.endTime = Arp::DateTime::Now();
 			           }
 
 			           ports.int64startTime2 = ports.startTime.GetTicks();
-				   ports.int64activeTime2 = ports.activeTime.GetTicks();
+					   ports.int64activeTime2 = ports.activeTime.GetTicks();
 			           ports.int64endTime2 = ports.endTime.GetTicks();
 
-			           Thread::Sleep(1000);
+			           Thread::Sleep(10000);
 
 					  //uint32 elapsed_time = endTime - startTime;
 		   	}
