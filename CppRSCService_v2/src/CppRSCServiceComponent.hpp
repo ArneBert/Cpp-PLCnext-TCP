@@ -136,52 +136,50 @@ public: /* Ports
            	   //#attributes(Hidden)
                struct Ports
                {
-               // Some Input Variables like TargetIP, Target Port, Start Connection, ect ect...
+					// Some Input Variables like TargetIP, Target Port, Start Connection, ect ect...
 
-               //#name(In)
-               //#attributes(Input)
-               Arp::byte InField[512];;
-               //#name(ReadNext)
-               //#attributes(Output)
-               Arp::boolean CanReadNext = false; // Some other component will recieve this and send Values when true to InField.
+					//#name(In)
+					//#attributes(Input)
+					Arp::byte InField[512];
+					//#name(ReadNext)
+					//#attributes(Output)
+					Arp::boolean CanReadNext = false; // Some other component will recieve this and send Values when true to InField.
 
-               //#name(Start network)
-               //#attributes(Input)
-				bool xtest = false;
+					//#name(Start network)
+					//#attributes(Input)
+					Arp::boolean xtest = false;
 
-               //#name(Out)
-               //#attributes(Output)
-               Arp::byte OutField[512];;
+					//#name(Out)
+					//#attributes(Output)
+					Arp::byte OutField[512];
 
-               //#name(WriteNext)
-               //#attributes(Input)
-               Arp::boolean CanWriteNext = false; // Some other component will set this and recieve Values from true to OutField.
+					//#name(WriteNext)
+					//#attributes(Input)
+					Arp::boolean CanWriteNext = false; // Some other component will set this and recieve Values from true to OutField.
 
-				//#name(starttime)
-				//#attributes(Output)
-				Arp::DateTime startTime;
+					//#name(starttime)
+					//#attributes(Output)
+					Arp::DateTime startTime;
 
-				//#name(ActiveTime)
-				//#attributes(Output)
-				Arp::DateTime activeTime;
+					//#name(ActiveTime)
+					//#attributes(Output)
+					Arp::DateTime activeTime;
 
-				//#name(Endtime)
-				//#attributes(Output)
-				Arp::DateTime endTime;
+					//#name(Endtime)
+					//#attributes(Output)
+					Arp::DateTime endTime;
 
-				//#name(Starttimeticks)
-				//#attributes(Output)
-				int64 int64startTime2;
+					//#name(Starttimeticks)
+					//#attributes(Output)
+					int64 int64startTime2;
 
-				//#name(Activetimeticks)
-				//#attributes(Output)
-				int64 int64activeTime2;
+					//#name(Activetimeticks)
+					//#attributes(Output)
+					int64 int64activeTime2;
 
-				//#name(EndTimeticks)
-				//#attributes(Output)
-				int64 int64endTime2;
-
-
+					//#name(EndTimeticks)
+					//#attributes(Output)
+					int64 int64endTime2;
 
                };
 
